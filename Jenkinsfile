@@ -26,15 +26,6 @@ pipeline {
                 }
             }
         }
-        
-        stage('Test API') {
-            steps {
-                script {
-                    // Ajouter les commandes pour tester l'API ici
-                    // Ex: sh 'curl http://localhost:5001/test-endpoint'
-                }
-            }
-        }
     }
     
     post {
