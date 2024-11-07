@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // Assurez-vous que le fichier Dockerfile est dans le répertoire racine du projet
-                    docker.build("svm_service")
+                    docker.build("svm_service:latest", "-f MicroService1Flask/Dockerfile .")
                 }
             }
         }
