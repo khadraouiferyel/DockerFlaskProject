@@ -1,10 +1,14 @@
 from flask import Flask, request, jsonify
 import base64
+from flask_cors import CORS 
 
 app = Flask(__name__)
 
 # Simuler le chargement d'un modèle SVM (ici, ce sera statique pour le moment)
 # Normalement, on chargerait le modèle avec joblib ou pickle
+
+CORS(app)
+
 
 @app.route('/predict', methods=['POST'])
 def predict_genre():

@@ -1,0 +1,11 @@
+<div class="upload-container">
+    <h2>Uploader un fichier audio (WAV)</h2>
+  
+    <!-- Formulaire pour télécharger le fichier -->
+    <input type="file" (change)="onFileSelected($event)" accept=".wav" />
+    <button (click)="sendAudio()">Envoyer</button>
+  
+    <!-- Affichage du genre prédit -->
+    <p *ngIf="genrePrediction">Genre prédit : {{ genrePrediction }}</p>
+  </div>
+  
