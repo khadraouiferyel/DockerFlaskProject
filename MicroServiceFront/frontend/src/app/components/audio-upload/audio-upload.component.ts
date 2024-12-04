@@ -23,7 +23,7 @@ export class AudioUploadComponent {
   // Méthode pour envoyer le fichier au backend Flask
   sendAudio() {
     if (!this.selectedFile) return;
-
+  
     const reader = new FileReader();
     reader.onload = () => {
       const wavBase64 = (reader.result as string).split(',')[1];  // Extraction du Base64
@@ -33,9 +33,16 @@ export class AudioUploadComponent {
         },
         (error) => {
           console.error('Erreur:', error);
+          // Handle different error cases
+          alert('An error occurred while predicting the genre. Please try again later.');
         }
       );
     };
+    reader.onerror = () => {
+      console.error('Error reading file');
+      alert('Error reading the selected file.');
+    };
     reader.readAsDataURL(this.selectedFile);
   }
+  
 }
