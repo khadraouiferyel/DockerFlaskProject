@@ -6,7 +6,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Récupère le code source depuis le dépôt
-                git branch: 'master', url: 'https://github.com/khadraouiferyel/DockerFlaskProject.git' 
+                git branch: 'main', url: 'https://github.com/khadraouiferyel/DockerFlaskProject.git' 
             }
         }
 
@@ -26,15 +26,15 @@ pipeline {
             }
         }
 
-        // stage('Build Services') {
-        //     steps {
-        //         // Construire les images Docker
-        //         script{
-        //             bat 'docker-compose build'
-        //             }
+        stage('Build Services') {
+            steps {
+                // Construire les images Docker
+                script{
+                    bat 'docker-compose build'
+                    }
                 
-        //     }
-        // }
+            }
+        }
 
         stage('Run Services') {
             steps {
