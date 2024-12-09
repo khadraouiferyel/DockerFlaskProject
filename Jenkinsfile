@@ -29,7 +29,7 @@ pipeline {
         stage('Build Services') {
             steps {
                 // Construire les images Docker
-                bat 'docker-compose build'
+                bat 'docker-compose -f docker-compose.yml build'
             }
         }
 
