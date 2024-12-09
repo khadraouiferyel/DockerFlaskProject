@@ -1,36 +1,28 @@
+
 pipeline {
     agent any
-    
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'master', url: 'https://github.com/khadraouiferyel/DockerFlaskProject.git'
-            }
-        }
-        
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    // Assurez-vous que le fichier Dockerfile est dans le répertoire racine du projet
-                    docker.build("svm_service:latest", "-f MicroService1Flask/Dockerfile .")
 
-                }
-            }
-        }
-        
-        stage('Run Flask in Docker') {
+    stages {
+        stage('Checkout Code') {
             steps {
-                script {
-                    // Lancement du conteneur Docker avec un port mappé
-                    docker.image("svm_service").run("-d -p 5001:5001")
-                }
+                // Récupère le code source depuis le dépôt
+                git branch: 'master', url: 'https://github.com/khadraouiferyel/DockerFlaskProject.git' 
             }
         }
-    }
-    
-    post {
-        always {
-            cleanWs()
+
+        stage('Build Services') {
+            steps {
+                // Construire les images Docker
+                sh 'docker-compose build'
+            }
         }
+
+        stage('Run Services') {
+            steps {
+                // Lancer les conteneurs
+                sh 'docker-compose up -d'
+            }
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 <div class="upload-container">
-    <h2>Uploader un fichier audio (WAV)</h2>
+  <h2>Use SVM Model</h2>
+    <h3>Uploader un fichier audio (WAV)</h3>
   
     <!-- Formulaire pour télécharger le fichier -->
     <input type="file" (change)="onFileSelected($event)" accept=".wav" />
@@ -7,5 +8,296 @@
   
     <!-- Affichage du genre prédit -->
     <p *ngIf="genrePrediction">Genre prédit : {{ genrePrediction }}</p>
+
+
+    <h2>Use VGG Model</h2>
+    <h3>Uploader un fichier audio (WAV)</h3>
+  
+    <!-- Formulaire pour télécharger le fichier -->
+    <input type="file" (change)="onFileSelectedVgg($event)" accept=".wav" />
+    <button (click)="sendAudioVgg()">Envoyer</button>
+  
+    <!-- Affichage du genre prédit -->
+    <p *ngIf="genrePredictionVgg">Genre prédit : {{ genrePredictionVgg }}</p>
   </div>
   
+
+
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+  <style>
+    /* Ajoutez le CSS directement ici */
+  </style>
+</head>
+<body>
+  <div class="baseCont">
+    <div class="music-card">
+      <!-- En-tête de l'album -->
+      <div class="album-header">
+        <img class="album-art" src="https://via.placeholder.com/150" alt="Album Art">
+        <div class="album-info">
+          <h2>SVM Model</h2>
+        </div>
+        <div class="user-avatar">
+          <span class="material-icons">account_circle</span>
+        </div>
+      </div>
+  
+      <!-- Contrôles principaux -->
+      <div class="controls">
+        <span class="material-icons">favorite</span>
+        
+
+        <div class="file-upload-container">
+          <label for="file-input">
+            <span class="material-icons">file_download</span>
+          </label>
+          <input 
+            type="file" 
+            id="file-input" 
+            (change)="onFileSelected($event)" 
+            accept=".wav" 
+            hidden />
+        </div>
+
+        
+        <button class="play-button">
+          <span class="material-icons">play_arrow</span>
+        </button>
+      </div>
+  
+      <!-- Liste des pistes -->
+      <div class="track-list">
+        <div class="track">
+          <div class="track-info">
+            <p>Every Day</p>
+            <small>John</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+        <div class="track">
+          <div class="track-info">
+            <p>Melbourne Sunset</p>
+            <small>John</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+        <div class="track">
+          <div class="track-info">
+            <p>Forever</p>
+            <small>John, Sarah</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+        <div class="track">
+          <div class="track-info">
+            <p>With You</p>
+            <small>John</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+      </div>
+    </div>
+    <div class="music-card">
+      <!-- En-tête de l'album -->
+      <div class="album-header">
+        <img class="album-art" src="https://via.placeholder.com/150" alt="Album Art">
+        <div class="album-info">
+          <h2>VGG Model</h2>
+        </div>
+        <div class="user-avatar">
+          <span class="material-icons">account_circle</span>
+        </div>
+      </div>
+  
+      <!-- Contrôles principaux -->
+      <div class="controls">
+        <span class="material-icons">favorite</span>
+        <span class="material-icons">file_download</span>
+        <button class="play-button">
+          <span class="material-icons">play_arrow</span>
+        </button>
+      </div>
+  
+      <!-- Liste des pistes -->
+      <div class="track-list">
+        <div class="track">
+          <div class="track-info">
+            <p>Every Day</p>
+            <small>John</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+        <div class="track">
+          <div class="track-info">
+            <p>Melbourne Sunset</p>
+            <small>John</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+        <div class="track">
+          <div class="track-info">
+            <p>Forever</p>
+            <small>John, Sarah</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+        <div class="track">
+          <div class="track-info">
+            <p>With You</p>
+            <small>John</small>
+          </div>
+          <span class="material-icons">more_vert</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Ajoutez le CSS ici -->
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #1c1c1e;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+        
+
+
+
+
+    .file-upload-container {
+        display: inline-block; /* Permet un alignement facile */
+        cursor: pointer;       /* Le curseur change pour indiquer une action cliquable */
+      }
+
+      .file-upload-container label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border: 2px dashed #ccc; /* Optionnel : ajoute un contour */
+        border-radius: 5px;
+        background-color: #f9f9f9; /* Optionnel : couleur de fond */
+        color: #666;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .file-upload-container label:hover {
+        background-color: #ddd;
+        color: #000;
+      }
+
+      .material-icons {
+        font-size: 24px; /* Taille de l'icône */
+      }
+
+    
+    .baseCont {
+      display: flex;           /* Utilise Flexbox */
+      justify-content: space-between; /* Espace égal entre les composants */
+      align-items: center;     /* Aligne verticalement au centre */
+      gap: 20px;  
+    }
+
+    .music-card {
+      width: 300px;
+      background: linear-gradient(to bottom, #111, #333);
+      color: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .album-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .album-art {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+    }
+
+    .album-info h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .album-info p {
+      margin: 0;
+      font-size: 14px;
+      color: gray;
+    }
+
+    .user-avatar .material-icons {
+      font-size: 32px;
+      color: gray;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin: 16px 0;
+    }
+
+    .controls .material-icons {
+      cursor: pointer;
+      color: gray;
+    }
+
+    .play-button .material-icons {
+      font-size: 32px;
+      color: white;
+      background: purple;
+      padding: 8px;
+      border-radius: 50%;
+    }
+
+    .track-list {
+      border-top: 1px solid gray;
+      padding-top: 16px;
+    }
+
+    .track {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid gray;
+    }
+
+    .track:last-child {
+      border-bottom: none;
+    }
+
+    .track-info p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .track-info small {
+      color: gray;
+    }
+
+    .track .material-icons {
+      color: gray;
+      cursor: pointer;
+    }
+  </style>
+</body>

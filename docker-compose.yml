@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./MicroServiceFront/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"  # Mappe le port 80 du conteneur au port 3000 de l'hôte
+    depends_on:
+      - svm_service  # Démarre le svm_service avant le frontend
+
+  svm_service:
+    build:
+      context: ./MicroService1Flask
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"  # Mappe le port 5001 du conteneur au port 5001 de l'hôte
+    environment:
+      - FLASK_ENV=development  # Exemple d'ajout de variables d'environnement
+
+  vgg_service:
+    build:
+      context: ./MicroService2Flask
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"  # Mappe le port 5002 du conteneur au port 5002 de l'hôte
+    environment:
+      - FLASK_ENV=development  # Exemple d'ajout de variables d'environnement
