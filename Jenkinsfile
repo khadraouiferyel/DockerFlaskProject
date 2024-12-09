@@ -10,19 +10,9 @@ pipeline {
             }
         }
 
-        stage('Check Docker') {
-            steps {
-                script {
-                    bat 'docker --version'
-                    bat 'docker-compose --version'
-                }
-            }
-        }
-
         stage('Debug') {
             steps {
-                // Lister les fichiers pour vérifier le contenu du répertoire
-                bat 'dir' // Windows
+                bat 'dir MicroService1Flask'  // Verify the files in the MicroService1Flask directory
             }
         }
 
