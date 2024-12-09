@@ -26,13 +26,15 @@ pipeline {
             }
         }
 
-        stage('Build Services') {
-            steps {
-                // Construire les images Docker
-                script{bat 'docker-compose build'}
+        // stage('Build Services') {
+        //     steps {
+        //         // Construire les images Docker
+        //         script{
+        //             bat 'docker-compose build'
+        //             }
                 
-            }
-        }
+        //     }
+        // }
 
         stage('Run Services') {
             steps {
