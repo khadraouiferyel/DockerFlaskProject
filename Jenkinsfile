@@ -13,8 +13,8 @@ pipeline {
         stage('Check Docker') {
             steps {
                 script {
-                    sh 'docker --version'
-                    sh 'docker-compose --version'
+                    bat 'docker --version'
+                    bat 'docker-compose --version'
                 }
             }
         }
