@@ -10,6 +10,13 @@ pipeline {
             }
         }
 
+        stage('Debug') {
+            steps {
+                // Lister les fichiers pour vérifier le contenu du répertoire
+                bat 'dir' // Windows
+            }
+        }
+
         stage('Build Services') {
             steps {
                 // Construire les images Docker
