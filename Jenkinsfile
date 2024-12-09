@@ -13,14 +13,14 @@ pipeline {
         stage('Build Services') {
             steps {
                 // Construire les images Docker
-                sh 'docker-compose build'
+                bat 'docker-compose build'
             }
         }
 
         stage('Run Services') {
             steps {
                 // Lancer les conteneurs
-                sh 'docker-compose up -d'
+                bat 'docker-compose up -d'
             }
         }
 
