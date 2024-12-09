@@ -29,7 +29,8 @@ pipeline {
         stage('Build Services') {
             steps {
                 // Construire les images Docker
-                bat 'docker-compose build'
+                script{bat 'docker-compose build'}
+                
             }
         }
 
