@@ -7,7 +7,7 @@ WORKDIR /app
 # Étape 3 : Copier les fichiers du projet dans le conteneur
 COPY . /app
 
-COPY MicroService1Flask/requirements.txt /app/requirements.txt
+
 
 # Étape 4 : Installer les dépendances du projet
 RUN pip install --no-cache-dir -r requirements.txt
