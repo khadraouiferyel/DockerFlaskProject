@@ -10,6 +10,15 @@ pipeline {
             }
         }
 
+        stage('Check Docker') {
+            steps {
+                script {
+                    sh 'docker --version'
+                    sh 'docker-compose --version'
+                }
+            }
+        }
+
         stage('Debug') {
             steps {
                 // Lister les fichiers pour vérifier le contenu du répertoire
