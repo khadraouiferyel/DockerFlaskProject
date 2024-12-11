@@ -28,7 +28,10 @@ export class AudioUploadComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFileVgg = input.files[0];
+      console.log(this.selectedFileVgg);
+
     }
+
   }
 
   // Méthode pour envoyer le fichier au backend Flask
@@ -58,7 +61,7 @@ export class AudioUploadComponent {
 
   sendAudioVgg() {
     if (!this.selectedFileVgg) return;
-  
+    console.log("passet");
     const reader = new FileReader();
     reader.onload = () => {
       const wavBase64 = (reader.result as string).split(',')[1];  // Extraction du Base64

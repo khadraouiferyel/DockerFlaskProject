@@ -7,8 +7,7 @@ services:
     ports:
       - "3000:80"  # Mappe le port 80 du conteneur au port 3000 de l'hôte
     depends_on:
-      - svm_service  
-      - vgg_service
+      - svm_service  # Démarre le svm_service avant le frontend
 
   svm_service:
     build:
@@ -18,8 +17,6 @@ services:
       - "5001:5001"  # Mappe le port 5001 du conteneur au port 5001 de l'hôte
     environment:
       - FLASK_ENV=development  # Exemple d'ajout de variables d'environnement
-    volumes:
-      - ./MicroService1Flask:/app  # Volume pour le service Flask
 
   vgg_service:
     build:
@@ -29,5 +26,3 @@ services:
       - "5002:5002"  # Mappe le port 5002 du conteneur au port 5002 de l'hôte
     environment:
       - FLASK_ENV=development  # Exemple d'ajout de variables d'environnement
-    volumes:
-      - ./MicroService2Flask:/app  # Volume pour le service Flask

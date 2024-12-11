@@ -36,7 +36,7 @@
 <body>
   <div class="baseCont">
     <div class="music-card">
-      <!-- En-tête de l'album -->
+      <!-- SVM Model-->
       <div class="album-header">
         <img class="album-art" src="https://via.placeholder.com/150" alt="Album Art">
         <div class="album-info">
@@ -64,18 +64,18 @@
             hidden />
         </div>
 
-        
-        <button class="play-button">
+        <button style="background-color: rgba(0, 0, 0, 0);" class="play-button" (click)="sendAudio()">
           <span class="material-icons">play_arrow</span>
         </button>
+
+        
       </div>
   
       <!-- Liste des pistes -->
       <div class="track-list">
         <div class="track">
           <div class="track-info">
-            <p>Every Day</p>
-            <small>John</small>
+            <p *ngIf="genrePrediction">Genre prédit : {{ genrePrediction }}</p>
           </div>
           <span class="material-icons">more_vert</span>
         </div>
@@ -117,18 +117,44 @@
       <!-- Contrôles principaux -->
       <div class="controls">
         <span class="material-icons">favorite</span>
-        <span class="material-icons">file_download</span>
-        <button class="play-button">
+        
+        
+
+
+        <div class="file-upload-container">
+          
+          <input 
+            type="file" 
+            id="file-input" 
+            (change)="onFileSelectedVgg($event)" 
+            accept=".wav" 
+             />
+        </div>
+
+
+
+
+
+        <!-- <div class="file-upload-container">
+          <label for="file-input">
+            <span class="material-icons">file_download</span>
+          </label>
+          <input type="file" (change)="onFileSelectedVgg($event)" accept=".wav" hidden/>
+
+        </div> -->
+        <button style="background-color: rgba(0, 0, 0, 0);" class="play-button" (click)="sendAudioVgg()">
           <span class="material-icons">play_arrow</span>
         </button>
+
+
+
       </div>
   
       <!-- Liste des pistes -->
       <div class="track-list">
         <div class="track">
           <div class="track-info">
-            <p>Every Day</p>
-            <small>John</small>
+            <p *ngIf="genrePredictionVgg">Genre prédit : {{ genrePredictionVgg }}</p>
           </div>
           <span class="material-icons">more_vert</span>
         </div>
@@ -168,6 +194,7 @@
       height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
+      background-image: url('../../../assets/background2.jpg'); /* Chemin de l'image */
     }
 
         
@@ -185,9 +212,8 @@
         align-items: center;
         justify-content: center;
         padding: 10px;
-        border: 2px dashed #ccc; /* Optionnel : ajoute un contour */
         border-radius: 5px;
-        background-color: #f9f9f9; /* Optionnel : couleur de fond */
+        background-color: rgba(0, 0, 0, 0); /* Optionnel : couleur de fond */
         color: #666;
         cursor: pointer;
         transition: background-color 0.3s, color 0.3s;
@@ -212,7 +238,7 @@
 
     .music-card {
       width: 300px;
-      background: linear-gradient(to bottom, #111, #333);
+      background: rgba(0, 0, 0, 0.6);
       color: white;
       border-radius: 16px;
       padding: 16px;
@@ -265,7 +291,6 @@
       font-size: 32px;
       color: white;
       background: purple;
-      padding: 8px;
       border-radius: 50%;
     }
 
