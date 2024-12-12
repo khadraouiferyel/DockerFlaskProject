@@ -1,16 +1,17 @@
 from flask import Flask, request, jsonify
 import base64
-import joblib
-import librosa
 import numpy as np
-from flask_cors import CORS
-import io
+import librosa
+from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
 
-# Enable CORS for the app
-CORS(app)
+# Define genre labels (ensure this matches the labels used during training)
+genre_labels = ['blues', 'classical', 'country', 'disco', 'hiphop', 
+                'jazz', 'metal', 'pop', 'reggae', 'rock']
 
+# Load the VGG model (replace with your model path)
+model = load_model('vgg19_gtzan_genre_classifier.h5')
 
 try:
     model = joblib.load('model_vgg.pkl')
@@ -23,65 +24,54 @@ genres = ["rock", "jazz", "pop", "classical", "hiphop", "blues", "country", "dis
 
 def predict_genre_from_wav(wav_music_bytes):
     try:
-        wav_file = io.BytesIO(wav_music_bytes)
-        # Convert the bytes to a signal using librosa
-        signal, rate = librosa.load(wav_file, sr=None)  # sr=None to preserve original sampling rate
+        # Decode the base64-encoded audio data
+        decoded_audio = base64.b64decode(audio_data)
 
-        # Extract Mel spectrogram features from the signal
-        hop_length = 512
-        n_fft = 2048
-        n_mels = 128
+        # Load the WAV audio from bytes
+        y, sr = librosa.load(io=decoded_audio, sr=None)  # sr will be automatically detected
 
-        S = librosa.feature.melspectrogram(y=signal, sr=rate, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
-        S_DB = librosa.power_to_db(S, ref=np.max)
+        # Extract Mel spectrogram
+        mel_spect = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128)
+        mel_spect_db = librosa.power_to_db(mel_spect, ref=np.max)
 
-        # Flatten the Mel spectrogram to match the input shape the model expects
-        S_DB_flattened = S_DB.flatten()[:1200]  # Truncate or pad if needed
+        return mel_spect_db
 
-        # Make the prediction
-        if model is None:
-            raise Exception("Model is not loaded properly.")
-        
-        y_pred = model.predict([S_DB_flattened])[0]
-        predicted_genre = genres[y_pred]
-
-        return predicted_genre,200
-    
     except Exception as e:
-        return f"Error in predicting genre: {str(e)}", 500
+        print(f"Error processing audio data: {e}")
+        return None
 
+def predict_genre(audio_data):
+    # Preprocess the audio data
+    preprocessed_audio = preprocess_audio_file(audio_data)
+    if preprocessed_audio is None:
+        return None
+
+    # Reshape the spectrogram for model input (assuming the model expects 2D input)
+    preprocessed_audio = np.expand_dims(preprocessed_audio, axis=0)  # Add batch dimension
+
+    # Normalize pixel values (if necessary, adjust based on your model's preprocessing)
+    preprocessed_audio = preprocessed_audio.astype('float32') / 255.0
+
+    # Predict using the model
+    predictions = model.predict(preprocessed_audio)
+    predicted_class = np.argmax(predictions, axis=1)[0]
+    predicted_genre = genre_labels[predicted_class]
+
+    # Return the predicted genre and confidence score
+    confidence = np.max(predictions)
+    return predicted_genre, confidence
 
 @app.route('/predictVgg', methods=['POST'])
 def predict():
-    try:
-        data = request.get_json()
+    data = request.json['audio_data']
+    predicted_genre, confidence = predict_genre(data)
 
-        # Check if the base64-encoded wav file is provided
-        if 'wav_music' not in data:
-            return jsonify({"error": "Le paramètre 'wav_music' est manquant."}), 400
-
-        # Log the base64-encoded data length to check if it's received
-        wav_music_base64 = data['wav_music']
-        print(f"Received Base64 string of length: {len(wav_music_base64)}")
-
-        # Decode the base64-encoded WAV music
-        try:
-            wav_music_bytes = base64.b64decode(wav_music_base64)
-            print(f"Decoded {len(wav_music_bytes)} bytes from Base64")
-        except Exception as e:
-            return jsonify({"error": f"Error decoding base64: {str(e)}"}), 400
-
-        # Get the predicted genre
-        predicted_genre, status_code = predict_genre_from_wav(wav_music_bytes)
-
-        if status_code != 200:
-            return jsonify({"error": predicted_genre}), status_code
-
-        return jsonify({"predicted_genre": predicted_genre})
-
-    except Exception as e:
-        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
-
+    if predicted_genre:
+        return jsonify({'genre': predicted_genre, 'confidence': confidence:.2f})
+    else:
+        return jsonify({'error': 'Error processing audio data'}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)
+
+
