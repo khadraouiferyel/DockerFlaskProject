@@ -16,7 +16,7 @@ pipeline {
             }
         }
 
-        stage('Build Services') {
+        stage('Build') {
             steps {
                 // Construire les images Docker
                 script{
@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-        stage('Run Services') {
+        stage('Deployment') {
             steps {
                 // Lancer les conteneurs
                 bat 'docker-compose up -d'
