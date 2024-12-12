@@ -13,7 +13,7 @@ CORS(app)
 
 
 try:
-    model = joblib.load('model_svm.pkl')
+    model = joblib.load('model_vgg.pkl')
 except Exception as e:
     model = None
     print(f"Error loading the model: {e}")
