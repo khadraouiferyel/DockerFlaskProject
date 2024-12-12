@@ -12,7 +12,7 @@ pipeline {
 
         stage('Debug') {
             steps {
-                bat 'dir MicroService1Flask'  // Verify the files in the MicroService1Flask directory
+                bat 'dir MicroService1Flask'  
             }
         }
 
@@ -30,6 +30,14 @@ pipeline {
             steps {
                 // Lancer les conteneurs
                 bat 'docker-compose up -d'
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    bat 'cd MicroService1Flask'
+                    bat 'python -m unittest test_predict.py'
+                }
             }
         }
 
